@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Retro HTML Editor</title>
+<style>
+body{
+  margin:0;
+  font-family:monospace;
+  height:100vh;
+}
+
+/* ===== LOADING SCREEN ===== */
+#loading{
+  position:fixed;
+  inset:0;
+  background:black;
+  color:cyan;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+
+.retro{
+  font-size:36px;
+  animation:glow 1.5s infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 5px cyan;}
+  to{text-shadow:0 0 30px cyan;}
+}
+
+.android{
+  width:60px;
+  margin:20px;
+  animation:bounce 1s infinite alternate;
+}
+
+@keyframes bounce{
+  from{transform:translateY(0);}
+  to{transform:translateY(-15px);}
+}
+
+.connecting::after{
+  content:'';
+  animation:dots 1s infinite;
+}
+
+@keyframes dots{
+  0%{content:'';}
+  33%{content:'.';}
+  66%{content:'..';}
+  100%{content:'...';}
+}
+
+/* ===== EDITOR ===== */
+#app{
+  display:none;
+  height:100vh;
+}
+
+textarea{
+  width:50%;
+  border:none;
+  outline:none;
+  padding:10px;
+  background:#111;
+  color:#0f0;
+  font-size:14px;
+}
+
+iframe{
+  width:50%;
+  border:none;
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="retro">RETRO STUDIOS</div>
+  <img class="android"
+  src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg">
+  <div class="connecting">Connecting to server</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <textarea id="editor"></textarea>
+  <iframe id="preview"></iframe>
+</div>
+
+<script>
+const editor = document.getElementById("editor");
+const preview = document.getElementById("preview");
+
+/* Domyślny kod */
+editor.value = `
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Hello World</h1>
+</body>
+</html>
+`;
+
+function update(){
+  preview.srcdoc = editor.value;
+}
+
+/* Start */
+setTimeout(()=>{
+  document.getElementById("loading").style.display="none";
+  document.getElementById("app").style.display="flex";
+  update();
+},3000);
+
+editor.addEventListener("input", update);
+</script>
+
+</body>
+</html>
